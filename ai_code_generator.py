@@ -2,11 +2,11 @@ import os
 import requests
 import time
 
-# ইউজার রিকোয়েস্ট পড়ুন
+# ১. ইউজারের রিকোয়েস্ট পড়ুন
 with open("user_request.txt", "r") as f:
     user_request = f.read()
 
-# DeepSeek API কনফিগারেশন
+# ২. DeepSeek API কনফিগারেশন
 API_KEY = os.getenv("API_KEY")
 API_URL = "https://api.deepseek.com/v1/chat/completions"
 headers = {
@@ -20,28 +20,23 @@ data = {
 }
 
 try:
-    # API কল
+    # ৩. API কল করুন
     response = requests.post(API_URL, headers=headers, json=data)
-    
-    # ডিবাগিং ইনফো
-    print(f"Status Code: {response.status_code}")
-    print(f"Response Text: {response.text}")
+    print(f"API Status: {response.status_code}")
+    print(f"API Response: {response.text}")  # ডিবাগিং
     
     if response.status_code == 200:
         response_data = response.json()
-        if "choices" in response_data:
-            generated_code = response_data["choices"][0]["message"]["content"]
-        else:
-            generated_code = f"# Error: Unexpected API response format\n{response.text}"
+        generated_code = response_data["choices"][0]["message"]["content"]
     else:
-        generated_code = f"# Error: API request failed with status {response.status_code}\n{response.text}"
-
+        generated_code = f"# Error: API request failed\nStatus: {response.status_code}\nResponse: {response.text}"
+        
 except Exception as e:
     generated_code = f"# Error: {str(e)}"
 
-# কোড সেভ করুন
+# ৪. কোড ফাইলে সেভ করুন
 with open("generated_code.py", "w") as f:
     f.write(generated_code)
 
-# বিলম্ব যোগ করুন (রেট লিমিট এড়াতে)
+# ৫. রেট লিমিট এড়াতে বিলম্ব করুন
 time.sleep(5)
