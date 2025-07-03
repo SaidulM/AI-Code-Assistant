@@ -15,9 +15,12 @@ jobs:
           echo "$USER_REQUEST" > user_request.txt
           python ai_code_generator.py
       - name: Commit and Push AI-Generated Code
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           git config --global user.name "AI Assistant"
           git config --global user.email "ai@example.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git add .
           git commit -m "AI-generated code for: ${{ github.event.issue.title }}"
           git push
