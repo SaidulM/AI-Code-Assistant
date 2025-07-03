@@ -6,7 +6,7 @@ with open("user_request.txt", "r") as f:
     user_request = f.read()
 
 # DeepSeek API কল করুন (উদাহরণ)
-API_KEY = os.getenv("API_KEY")  # GitHub Secrets থেকে লোড হবে
+API_KEY = os.getenv("API_KEY")  # GitHub Secrets থেকে API_KEY লোড করুন
 headers = {"Authorization": f"Bearer {API_KEY}"}
 data = {
     "model": "deepseek-coder",
