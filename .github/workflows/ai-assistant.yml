@@ -1,0 +1,23 @@
+name: AI Code Assistant
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  generate-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Code using AI
+        env:
+          USER_REQUEST: "${{ github.event.issue.body }}"
+        run: |
+          echo "$USER_REQUEST" > user_request.txt
+          python ai_code_generator.py
+      - name: Commit and Push AI-Generated Code
+        run: |
+          git config --global user.name "AI Assistant"
+          git config --global user.email "ai@example.com"
+          git add .
+          git commit -m "AI-generated code for: ${{ github.event.issue.title }}"
+          git push
