@@ -11,16 +11,16 @@ jobs:
       - name: Generate Code using AI
         env:
           USER_REQUEST: "${{ github.event.issue.body }}"
+          API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}  # GitHub Secrets থেকে API_KEY নেবে
         run: |
           echo "$USER_REQUEST" > user_request.txt
           python ai_code_generator.py
-      - name: Commit and Push AI-Generated Code
+      - name: Commit and Push Code
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub-এর নিজস্ব টোকেন
         run: |
           git config --global user.name "AI Assistant"
           git config --global user.email "ai@example.com"
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git add .
           git commit -m "AI-generated code for: ${{ github.event.issue.title }}"
           git push
